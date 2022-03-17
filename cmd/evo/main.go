@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"template/internal/app/geometry"
 	"time"
 
 	"github.com/faiface/pixel"
@@ -20,7 +21,7 @@ func main() {
 func run() {
 	cfg := pixelgl.WindowConfig{
 		Title:  "evo",
-		Bounds: pixel.R(0, 0, 720, 720),
+		Bounds: pixel.R(0, 0, 500, 500),
 		VSync:  true,
 	}
 	win, err := pixelgl.NewWindow(cfg)
@@ -29,6 +30,13 @@ func run() {
 	}
 
 	imd := imdraw.New(nil)
+
+	// generate points
+	points := make([]*geometry.Point, 0)
+
+	points = append(points, geometry.NewPoint(win.Bounds(), pixel.V(100, 100)))
+	points = append(points, geometry.NewPoint(win.Bounds(), pixel.V(150, 400)))
+	points = append(points, geometry.NewPoint(win.Bounds(), pixel.V(400, 300)))
 
 	var (
 		frames = 0
@@ -43,6 +51,10 @@ func run() {
 		// отрисовка
 		win.Clear(colornames.Black)
 		imd.Clear()
+
+		for _, p := range points {
+			p.Draw(imd)
+		}
 
 		imd.Draw(win)
 
